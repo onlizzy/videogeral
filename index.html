@@ -3,113 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoGeral - O Mundo dos Vídeos</title>
+    <title>RN TV - Canal de Notícias em Vídeo | rn.co.mz</title>
+    
+    <!-- Metadados Profissionais e SEO -->
+    <meta name="description" content="RN TV é o canal oficial de videonotícias do Repórter Nacional (rn.co.mz). Acompanhe reportagens em directo, política, economia, sociedade e desporto em Moçambique.">
+    <meta name="keywords" content="RN TV, Repórter Nacional, Notícias Moçambique, rn.co.mz, Vídeo Notícias, Maputo, Informação em Tempo Real">
+    <meta name="author" content="Repórter Nacional">
+    <meta name="theme-color" content="#020617">
+    <link rel="canonical" href="https://rn.co.mz/">
+
+    <!-- Open Graph / Redes Sociais -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rn.co.mz/">
+    <meta property="og:title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
+    <meta property="og:description" content="Acompanhe em directo as principais reportagens, cobertura especial e os factos que marcam a actualidade em Moçambique.">
+    <meta property="og:image" content="https://rn.co.mz/assets/img/rn-tv-share.jpg">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
+    <meta name="twitter:description" content="O canal oficial de videonotícias do Repórter Nacional. Informação rigorosa e em tempo real em Moçambique.">
+
+    <!-- Frameworks e Estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        .scrollbar-none::-webkit-scrollbar { display: none; }
-        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes marqueeTv {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .ticker-scroll {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeTv 30s linear infinite;
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen pb-16 md:pb-0">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <a href="#" class="text-xl font-black tracking-wider text-red-600">VIDEO<span class="text-white">GERAL</span></a>
-        </div>
-        <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
-            <a href="#" class="text-white border-b-2 border-red-600 pb-1">Início</a>
-            <a href="#" class="hover:text-white transition">Filmes</a>
-            <a href="#" class="hover:text-white transition">Comédia</a>
-            <a href="#" class="hover:text-white transition">Dramas</a>
-            <a href="#" class="hover:text-white transition">Mais Curtidos</a>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button class="w-9 h-9 bg-slate-800 hover:bg-slate-700 rounded-full flex items-center justify-center text-slate-300 transition">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-            <a href="admin.html" class="w-9 h-9 bg-red-600 hover:bg-red-500 rounded-full flex items-center justify-center text-white transition" title="Painel Admin">
-                <i class="fa-solid fa-user"></i>
-            </a>
-        </div>
-    </header>
-
-    <!-- Sub-Categories Bar -->
-    <nav class="flex space-x-2 px-4 py-3 overflow-x-auto bg-slate-900/50 border-b border-slate-900 whitespace-nowrap scrollbar-none">
-        <button class="px-4 py-1.5 bg-red-600 text-white rounded-full text-xs font-semibold shadow-md flex items-center"><i class="fa-solid fa-border-all mr-1.5"></i> Todos</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-face-laugh-beam mr-1.5"></i> Comédia</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-fire mr-1.5"></i> Mini-Dramas</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-music mr-1.5"></i> Música</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-bolt mr-1.5"></i> Desafios</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-gamepad mr-1.5"></i> Games</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-lightbulb mr-1.5"></i> Curiosidades</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-film mr-1.5"></i> Filmes</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Dicas</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-star mr-1.5"></i> Fofoca</button>
-        <button class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full text-xs font-semibold transition flex items-center"><i class="fa-solid fa-futbol mr-1.5"></i> Esportes</button>
-    </nav>
-
-    <!-- Main Content Container -->
-    <main id="public-content" class="max-w-7xl mx-auto px-4 py-6 space-y-12">
-        <div class="text-center py-12 text-slate-400">
-            <i class="fa-solid fa-spinner fa-spin text-2xl text-red-600 mb-2"></i>
-            <p>Carregando vídeos do banco de dados...</p>
-        </div>
-    </main>
-
-    <!-- Modal do Player de Vídeo -->
-    <div id="video-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-            <button onclick="fecharModal()" class="absolute top-3 right-3 z-10 w-10 h-10 bg-black/60 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div class="aspect-video bg-black flex items-center justify-center">
-                <video id="modal-video-player" controls autoplay class="w-full h-full object-contain"></video>
+    <div class="flex-1 flex flex-col">
+        <!-- Header do Canal -->
+        <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-xl">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <span class="text-2xl font-black tracking-wider text-red-600">RN<span class="text-white">TV</span></span>
+                    <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-widest animate-pulse">● AO VIVO</span>
+                </a>
+                <span class="text-xs text-slate-400 hidden md:inline-block border-l border-slate-700 pl-4">Repórter Nacional • Informação em Tempo Real</span>
             </div>
-            <div class="p-4 bg-slate-900">
-                <h2 id="modal-title" class="text-base font-bold text-white"></h2>
-                <p id="modal-info" class="text-xs text-slate-400 mt-1"></p>
+            <div class="flex items-center space-x-3">
+                <a href="admin.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition flex items-center border border-slate-700 shadow">
+                    <i class="fa-solid fa-lock text-red-500 mr-2"></i> Painel Admin
+                </a>
+            </div>
+        </header>
+
+        <!-- Ticker de Última Hora Superior -->
+        <div class="bg-red-600 text-white text-xs font-medium py-2 px-4 overflow-hidden whitespace-nowrap flex items-center shadow-inner">
+            <span class="bg-black/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] mr-3 tracking-wider flex-shrink-0">Última Hora</span>
+            <div class="inline-block animate-marquee">
+                Bem-vindo ao RN TV — Acompanhe em directo as principais reportagens, cobertura especial e os factos que marcam a actualidade em Moçambique e no mundo.
             </div>
         </div>
+
+        <!-- Main Container -->
+        <main class="max-w-6xl mx-auto px-4 py-6 space-y-8 flex-1 w-full">
+            
+            <!-- Bloco Principal do Player de TV -->
+            <section class="space-y-4">
+                
+                <!-- Ecrã da Televisão -->
+                <div id="player-container" class="relative group bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl aspect-video max-w-4xl mx-auto">
+                    
+                    <!-- Logotipo / Marca d'água RN TV -->
+                    <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 flex items-center space-x-2 z-30 pointer-events-none shadow-lg">
+                        <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                        <span class="text-white font-black text-xs tracking-wider">RN<span class="text-red-500">TV</span></span>
+                    </div>
+
+                    <!-- Elemento de Vídeo -->
+                    <video id="main-video-player" class="w-full h-full object-contain" controls playsinline poster=""></video>
+
+                    <!-- Lower Third (Barra Inferior Estilo Telejornal) -->
+                    <div class="absolute inset-x-0 bottom-0 pointer-events-none z-20 flex flex-col justify-end">
+                        
+                        <div class="bg-gradient-to-t from-black via-black/80 to-transparent pt-12 pb-2 px-4 space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span id="current-category" class="bg-red-700 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow tracking-wider">POLÍTICA</span>
+                                <span class="text-amber-400 text-[10px] font-bold uppercase tracking-wider">• <span id="current-date">MAPUTO</span></span>
+                            </div>
+                            <h1 id="current-title" class="text-white font-black text-sm md:text-lg drop-shadow-lg line-clamp-1 leading-snug">Carregando transmissão oficial...</h1>
+                        </div>
+
+                        <!-- Letreiro / Ticker Inferior Contínuo -->
+                        <div class="bg-red-950/95 border-t border-red-600 text-white text-[10px] py-1 px-3 flex items-center space-x-3 overflow-hidden">
+                            <span class="bg-red-600 text-white font-black px-2 py-0.5 rounded uppercase tracking-wider text-[9px] flex-shrink-0 shadow z-10">PLANTÃO 24</span>
+                            
+                            <div class="overflow-hidden flex-1 relative h-4">
+                                <div class="ticker-scroll absolute text-slate-200 font-medium">
+                                    Cobertura especial em tempo real em todo o território nacional — rn.co.mz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 Publicidade: 821701000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🚨 Denúncias e Sugestões: 871701000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🌐 Visite o nosso portal: www.rn.co.mz
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-2 ml-auto flex-shrink-0 font-bold text-amber-300 z-10 bg-red-950 pl-2">
+                                <span class="hidden sm:inline">MAPUTO 32°C</span>
+                                <span>•</span>
+                                <span id="tv-clock">12:47</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Placeholder de Sinal Fora do Ar -->
+                    <div id="player-placeholder" class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center text-slate-400 p-6 text-center z-30">
+                        <i class="fa-solid fa-satellite-dish text-5xl text-red-600 mb-3 animate-pulse"></i>
+                        <p class="text-sm font-semibold text-white">Sintonizando o canal RN TV...</p>
+                    </div>
+                </div>
+
+                <!-- Barra de Ferramentas / Partilha e Controlo de Ecrã Abaixo da TV -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-5 shadow-xl flex flex-wrap items-center justify-between gap-3 max-w-4xl mx-auto">
+                    <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+                        <span class="text-xs text-slate-400 font-semibold flex items-center mr-2">
+                            <i class="fa-solid fa-share-nodes text-red-500 mr-2"></i> Partilhar:
+                        </span>
+                        <button onclick="partilhar('whatsapp')" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-emerald-600/30 shadow">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                        </button>
+                        <button onclick="partilhar('facebook')" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-blue-600/30 shadow">
+                            <i class="fa-brands fa-facebook text-sm"></i> Facebook
+                        </button>
+                        <button onclick="partilhar('telegram')" class="bg-sky-600/20 hover:bg-sky-600 text-sky-400 hover:text-white text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-sky-600/30 shadow">
+                            <i class="fa-brands fa-telegram text-sm"></i> Telegram
+                        </button>
+                        <button onclick="partilhar('copiar')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-slate-700 shadow">
+                            <i class="fa-solid fa-link text-sm"></i> Copiar Link
+                        </button>
+                    </div>
+                    <!-- Botões de Tela Cheia e Modo Horizontal -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="alternarTelaCheia()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-slate-700 shadow" title="Tela Cheia">
+                            <i class="fa-solid fa-expand text-red-500"></i> <span class="hidden sm:inline">Tela Cheia</span>
+                        </button>
+                        <button onclick="alternarHorizontal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl font-semibold transition flex items-center space-x-1.5 border border-slate-700 shadow" title="Modo Horizontal / Paisagem">
+                            <i class="fa-solid fa-mobile-screen-button text-red-500"></i> <span class="hidden sm:inline">Horizontal</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Arquivo e Reportagens com Paginação -->
+            <section class="space-y-6 pt-4 border-t border-slate-800/80">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-film text-red-600 mr-2"></i> Arquivo de Reportagens
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Explore o acervo de vídeos do Repórter Nacional (máximo de 10 por página).</p>
+                    </div>
+                    <!-- Filtros de Categoria -->
+                    <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0 text-xs">
+                        <button onclick="filtrarCategoria('Todas')" class="category-btn active px-3.5 py-1.5 rounded-xl bg-red-600 text-white font-semibold transition whitespace-nowrap shadow">Todas</button>
+                        <button onclick="filtrarCategoria('Última Hora')" class="category-btn px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">Última Hora</button>
+                        <button onclick="filtrarCategoria('Política')" class="category-btn px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">Política</button>
+                        <button onclick="filtrarCategoria('Economia')" class="category-btn px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">Economia</button>
+                        <button onclick="filtrarCategoria('Sociedade')" class="category-btn px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">Sociedade</button>
+                        <button onclick="filtrarCategoria('Desporto')" class="category-btn px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">Desporto</button>
+                    </div>
+                </div>
+
+                <!-- Grade de Vídeos do Arquivo -->
+                <div id="videos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div class="text-center py-12 text-slate-500 text-xs col-span-full">A carregar videoteca...</div>
+                </div>
+
+                <!-- Controles de Paginação (1, 2, 3...) -->
+                <div id="pagination-container" class="flex items-center justify-center space-x-2 pt-4"></div>
+            </section>
+
+        </main>
     </div>
 
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 w-full z-50 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex justify-around items-center py-2 text-slate-400 md:hidden">
-        <a href="#" class="flex flex-col items-center text-red-500">
-            <i class="fa-solid fa-house text-base"></i>
-            <span class="text-[10px] mt-1 font-medium">Início</span>
-        </a>
-        <a href="#" class="flex flex-col items-center hover:text-white transition">
-            <i class="fa-solid fa-film text-base"></i>
-            <span class="text-[10px] mt-1 font-medium">Filmes</span>
-        </a>
-        <a href="admin.html" class="flex flex-col items-center text-white">
-            <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white text-sm shadow-lg shadow-red-600/30">
-                <i class="fa-solid fa-plus"></i>
+    <!-- Rodapé Fixo / Completo com Menus Úteis -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-8 text-xs text-slate-400 w-full shadow-2xl mt-auto">
+        <div class="max-w-6xl mx-auto px-4 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="space-y-2">
+                    <span class="text-xl font-black tracking-wider text-red-600">RN<span class="text-white">TV</span></span>
+                    <p class="text-slate-400 text-xs">O canal oficial de videonotícias do Repórter Nacional. Informação rigorosa e em tempo real em Moçambique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 text-red-500">Links Úteis</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-white transition">Início / Directo</a></li>
+                        <li><a href="https://rn.co.mz" target="_blank" class="hover:text-white transition">Portal RN (rn.co.mz)</a></li>
+                        <li><a href="admin.html" class="hover:text-white transition">Painel Administrativo</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 text-red-500">Institucional</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="alert('RN TV é o canal de videonotícias do Repórter Nacional (rn.co.mz), cobrindo os principais acontecimentos políticos, económicos e sociais em Moçambique.'); return false;" class="hover:text-white transition">Sobre Nós</a></li>
+                        <li><a href="#" onclick="alert('Política de Privacidade: O RN TV preza pela confidencialidade e segurança dos dados dos utilizadores conforme a legislação em vigor em Moçambique.'); return false;" class="hover:text-white transition">Política de Privacidade</a></li>
+                        <li><a href="#" onclick="alert('Termos de Uso: Todos os conteúdos transmitidos são propriedade do Repórter Nacional. A reprodução sem autorização prévia é proibida.'); return false;" class="hover:text-white transition">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 text-red-500">Contactos</h4>
+                    <ul class="space-y-2">
+                        <li><i class="fa-solid fa-phone text-red-500 mr-1.5"></i> Publicidade: 821701000</li>
+                        <li><i class="fa-solid fa-headset text-red-500 mr-1.5"></i> Denúncias: 871701000</li>
+                        <li><i class="fa-solid fa-envelope text-red-500 mr-1.5"></i> info@rn.co.mz</li>
+                    </ul>
+                </div>
             </div>
-        </a>
-        <a href="#" class="flex flex-col items-center hover:text-white transition">
-            <i class="fa-solid fa-face-laugh-beam text-base"></i>
-            <span class="text-[10px] mt-1 font-medium">Comédia</span>
-        </a>
-        <a href="#" class="flex flex-col items-center hover:text-white transition">
-            <i class="fa-solid fa-user text-base"></i>
-            <span class="text-[10px] mt-1 font-medium">Perfil</span>
-        </a>
-    </nav>
+            <div class="border-t border-slate-800 pt-4 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2">
+                <p>Todos os direitos reservados &copy; 2026 • Repórter Nacional (<a href="https://rn.co.mz" class="text-red-500 hover:underline">rn.co.mz</a>)</p>
+                <p class="text-[11px] text-slate-500">Maputo, Moçambique</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        const SUPABASE_URL = 'SUA_SUPABASE_URL_AQUI'; // Ex: https://xyzabc.supabase.co
+        const SUPABASE_URL = 'https://llajdcjedkvvmdqjszfx.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_FNy8BJLIdTEyWPRBxfb9hg_gisFcT7d';
-        
+
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function carregarVideosPublicos() {
+        let globalVideos = [];
+        let categoriaAtual = 'Todas';
+        let paginaAtual = 1;
+        const itensPorPagina = 10;
+        let idVideoAtual = null;
+        let videoAtualObj = null;
+
+        const playerEl = document.getElementById('main-video-player');
+
+        setInterval(() => {
+            const agora = new Date();
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            const relogioEl = document.getElementById('tv-clock');
+            if (relogioEl) relogioEl.textContent = `${horas}:${minutos}`;
+        }, 1000);
+
+        playerEl.addEventListener('ended', () => {
+            document.getElementById('player-container').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function formatarDuracao(duracao) {
+            if (!duracao) return '0:00';
+            return duracao.trim();
+        }
+
+        async function carregarCanal() {
             try {
                 const { data: videos, error } = await _supabase
                     .from('videos')
@@ -118,58 +274,195 @@
 
                 if (error) throw error;
 
-                const container = document.getElementById('public-content');
-                if (!videos || videos.length === 0) {
-                    container.innerHTML = '<p class="text-center text-slate-400 py-12">Nenhum vídeo cadastrado no momento. Use o painel administrativo para enviar conteúdo.</p>';
-                    return;
+                globalVideos = videos || [];
+                
+                if (globalVideos.length > 0) {
+                    mudarVideoPrincipal(globalVideos[0], false);
+                } else {
+                    document.getElementById('player-placeholder').innerHTML = `
+                        <i class="fa-solid fa-triangle-exclamation text-4xl text-amber-500 mb-2"></i>
+                        <p class="text-sm font-semibold text-white">Nenhuma reportagem disponível no momento.</p>
+                        <p class="text-xs text-slate-400 mt-1">Publique vídeos através do Painel Administrativo.</p>
+                    `;
                 }
 
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        ${videos.map(video => `
-                            <div onclick="abrirVideo('${video.url}', '${video.title.replace(/'/g, "\\'")}', '${video.channel || 'VideoGeral'} • ${video.views || 0} visualizações')" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden group cursor-pointer">
-                                <div class="relative aspect-video bg-slate-950 flex items-center justify-center">
-                                    <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                                        <div class="w-12 h-12 bg-red-600 rounded-full flex items-center text-white justify-center shadow-lg">
-                                            <i class="fa-solid fa-play ml-1"></i>
-                                        </div>
-                                    </div>
-                                    <span class="absolute bottom-2 right-2 bg-black/80 text-[10px] font-bold px-2 py-0.5 rounded text-white">${video.duration || '0:00'}</span>
-                                </div>
-                                <div class="p-4">
-                                    <span class="text-[10px] font-bold text-red-500 uppercase tracking-wider">${video.category}</span>
-                                    <h3 class="text-sm font-bold text-slate-100 group-hover:text-red-400 transition mt-1">${video.title}</h3>
-                                    <p class="text-[11px] text-slate-400 mt-2">${video.channel || 'VideoGeral'} • ${video.views || 0} visualizações</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                aplicarFiltroEAtualizarGrid();
+
             } catch (err) {
-                console.error('Erro ao buscar vídeos:', err.message);
+                console.error(err);
+                document.getElementById('videos-grid').innerHTML = '<p class="text-center text-red-500 text-xs py-8 col-span-full">Erro ao carregar o canal de notícias.</p>';
             }
         }
 
-        function abrirVideo(url, title, info) {
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('modal-video-player');
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-info').textContent = info;
-            player.src = url;
-            modal.classList.remove('hidden');
-            player.play();
+        window.mudarVideoPrincipal = function(video, rolarTela = true) {
+            idVideoAtual = video.id;
+            videoAtualObj = video;
+
+            const placeholder = document.getElementById('player-placeholder');
+            
+            playerEl.src = video.url;
+            playerEl.poster = video.thumbnail || '';
+            playerEl.play().catch(() => {});
+
+            placeholder.style.display = 'none';
+
+            document.getElementById('current-title').textContent = video.title;
+            document.getElementById('current-category').textContent = video.category || 'GERAL';
+            
+            const dataFormatada = new Date(video.created_at).toLocaleDateString('pt-MZ', { day: '2-digit', month: 'long', year: 'numeric' });
+            document.getElementById('current-date').textContent = dataFormatada.toUpperCase();
+
+            if (rolarTela) {
+                document.getElementById('player-container').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            aplicarFiltroEAtualizarGrid();
+        };
+
+        // Função de Tela Cheia
+        window.alternarTelaCheia = function() {
+            const playerContainer = document.getElementById('player-container');
+            if (!document.fullscreenElement) {
+                if (playerContainer.requestFullscreen) {
+                    playerContainer.requestFullscreen();
+                } else if (playerContainer.webkitRequestFullscreen) {
+                    playerContainer.webkitRequestFullscreen();
+                } else if (playerEl.requestFullscreen) {
+                    playerEl.requestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        };
+
+        // Função de Modo Horizontal / Paisagem
+        window.alternarHorizontal = function() {
+            const playerContainer = document.getElementById('player-container');
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(err => {
+                    console.log('Bloqueio de orientação paisagem não suportado:', err);
+                });
+            }
+            if (!document.fullscreenElement) {
+                if (playerContainer.requestFullscreen) {
+                    playerContainer.requestFullscreen().then(() => {
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('landscape').catch(() => {});
+                        }
+                    }).catch(() => {});
+                }
+            } else {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            }
+        };
+
+        window.partilhar = function(rede) {
+            const titulo = videoAtualObj ? videoAtualObj.title : document.title;
+            const url = window.location.href;
+
+            if (rede === 'whatsapp') {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('📰 ' + titulo + ' — RN TV: ' + url)}`, '_blank');
+            } else if (rede === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+            } else if (rede === 'telegram') {
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(titulo)}`, '_blank');
+            } else if (rede === 'copiar') {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Link da reportagem copiado com sucesso!');
+                });
+            }
+        };
+
+        function renderizarGridArquivos(videos) {
+            const grid = document.getElementById('videos-grid');
+            const paginationContainer = document.getElementById('pagination-container');
+
+            if (videos.length === 0) {
+                grid.innerHTML = '<p class="text-center text-slate-500 text-xs py-12 col-span-full">Não há reportagens disponíveis nesta categoria.</p>';
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            const totalPaginas = Math.ceil(videos.length / itensPorPagina);
+            if (paginaAtual > totalPaginas) paginaAtual = 1;
+
+            const inicio = (paginaAtual - 1) * itensPorPagina;
+            const fim = inicio + itensPorPagina;
+            const videosPagina = videos.slice(inicio, fim);
+
+            grid.innerHTML = videosPagina.map(video => `
+                <div onclick='mudarVideoPrincipal(${JSON.stringify(video).replace(/'/g, "&apos;")}, true)' class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-slate-700 transition cursor-pointer group shadow-xl flex flex-col">
+                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
+                        <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute bottom-2 right-2 bg-black/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center space-x-1">
+                            <i class="fa-regular fa-clock text-red-500"></i>
+                            <span>${formatarDuracao(video.duration)}</span>
+                        </span>
+                    </div>
+                    <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-red-500 uppercase tracking-wide">${video.category}</span>
+                            <h3 class="text-sm font-bold text-white line-clamp-2 mt-1 group-hover:text-red-400 transition">${video.title}</h3>
+                        </div>
+                        <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                            <span>RN TV News</span>
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${new Date(video.created_at).toLocaleDateString('pt-MZ')}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Renderizar paginação (1, 2, 3...)
+            if (totalPaginas > 1) {
+                let paginationHtml = '';
+                for (let i = 1; i <= totalPaginas; i++) {
+                    const activeClass = i === paginaAtual 
+                        ? 'bg-red-600 text-white font-bold shadow' 
+                        : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800';
+                    paginationHtml += `<button onclick="mudarPagina(${i})" class="w-9 h-9 rounded-xl text-xs transition ${activeClass}">${i}</button>`;
+                }
+                paginationContainer.innerHTML = paginationHtml;
+            } else {
+                paginationContainer.innerHTML = '';
+            }
         }
 
-        function fecharModal() {
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('modal-video-player');
-            player.pause();
-            player.src = '';
-            modal.classList.add('hidden');
+        window.mudarPagina = function(pagina) {
+            paginaAtual = pagina;
+            aplicarFiltroEAtualizarGrid();
+            window.scrollTo({ top: document.getElementById('videos-grid').offsetTop - 100, behavior: 'smooth' });
+        };
+
+        window.filtrarCategoria = function(cat) {
+            categoriaAtual = cat;
+            paginaAtual = 1;
+
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.textContent.trim() === cat || (cat === 'Todas' && btn.textContent.trim() === 'Todas')) {
+                    btn.classList.remove('bg-slate-900', 'border', 'border-slate-800', 'text-slate-300');
+                    btn.classList.add('bg-red-600', 'text-white', 'font-semibold', 'shadow');
+                } else {
+                    btn.classList.remove('bg-red-600', 'text-white', 'font-semibold', 'shadow');
+                    btn.classList.add('bg-slate-900', 'border', 'border-slate-800', 'text-slate-300');
+                }
+            });
+
+            aplicarFiltroEAtualizarGrid();
+        };
+
+        function aplicarFiltroEAtualizarGrid() {
+            let lista = globalVideos;
+            if (categoriaAtual !== 'Todas') {
+                lista = globalVideos.filter(v => v.category === categoriaAtual);
+            }
+            renderizarGridArquivos(lista);
         }
 
-        carregarVideosPublicos();
+        carregarCanal();
     </script>
 </body>
 </html>
