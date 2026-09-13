@@ -12,17 +12,20 @@
     <meta name="theme-color" content="#020617">
     <link rel="canonical" href="https://rn.co.mz/">
 
-    <!-- Open Graph / Redes Sociais -->
+    <!-- Open Graph / Redes Sociais (Com IDs para atualização dinâmica ao selecionar vídeos) -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rn.co.mz/">
-    <meta property="og:title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
-    <meta property="og:description" content="Acompanhe em directo as principais reportagens, cobertura especial e os factos que marcam a actualidade em Moçambique.">
-    <meta property="og:image" content="https://rn.co.mz/assets/img/rn-tv-share.jpg">
+    <meta property="og:site_name" content="RN TV">
+    <meta property="og:url" id="meta-og-url" content="https://rn.co.mz/">
+    <meta property="og:title" id="meta-og-title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
+    <meta property="og:description" id="meta-og-desc" content="Acompanhe em directo as principais reportagens, cobertura especial e os factos que marcam a actualidade em Moçambique.">
+    <meta property="og:image" id="meta-og-image" content="https://rn.co.mz/assets/img/rn-tv-share.jpg">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
-    <meta name="twitter:description" content="O canal oficial de videonotícias do Repórter Nacional. Informação rigorosa e em tempo real em Moçambique.">
+    <meta name="twitter:url" id="meta-twitter-url" content="https://rn.co.mz/">
+    <meta name="twitter:title" id="meta-twitter-title" content="RN TV - Canal de Notícias em Vídeo | rn.co.mz">
+    <meta name="twitter:description" id="meta-twitter-desc" content="O canal oficial de videonotícias do Repórter Nacional. Informação rigorosa e em tempo real em Moçambique.">
+    <meta name="twitter:image" id="meta-twitter-image" content="https://rn.co.mz/assets/img/rn-tv-share.jpg">
 
     <!-- Frameworks e Estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -52,7 +55,7 @@
 
     <div class="flex-1 flex flex-col">
         <!-- Header do Canal -->
-        <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-xl">
+        <header id="topo-cabecalho" class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-xl">
             <div class="flex items-center space-x-4">
                 <a href="index.html" class="flex items-center space-x-2">
                     <span class="text-2xl font-black tracking-wider text-red-600">RN<span class="text-white">TV</span></span>
@@ -257,7 +260,7 @@
         }, 1000);
 
         playerEl.addEventListener('ended', () => {
-            document.getElementById('player-container').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         function formatarDuracao(duracao) {
@@ -312,8 +315,23 @@
             const dataFormatada = new Date(video.created_at).toLocaleDateString('pt-MZ', { day: '2-digit', month: 'long', year: 'numeric' });
             document.getElementById('current-date').textContent = dataFormatada.toUpperCase();
 
+            // Atualiza dinamicamente as meta tags de Redes Sociais / Open Graph para puxar a imagem e título corretos ao partilhar
+            if (video.title) {
+                const ogTitle = document.getElementById('meta-og-title');
+                const twitterTitle = document.getElementById('meta-twitter-title');
+                if (ogTitle) ogTitle.content = video.title + ' — RN TV';
+                if (twitterTitle) twitterTitle.content = video.title + ' — RN TV';
+            }
+            if (video.thumbnail) {
+                const ogImage = document.getElementById('meta-og-image');
+                const twitterImage = document.getElementById('meta-twitter-image');
+                if (ogImage) ogImage.content = video.thumbnail;
+                if (twitterImage) twitterImage.content = video.thumbnail;
+            }
+
+            // Sobe automaticamente de forma imediata e garantida para o topo absoluto da página
             if (rolarTela) {
-                document.getElementById('player-container').scrollIntoView({ behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
             aplicarFiltroEAtualizarGrid();
